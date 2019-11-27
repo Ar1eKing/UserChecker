@@ -2,7 +2,7 @@
     x:Class="UserChecker.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ap="clr-namespace:UserChecker.Controls"
+    xmlns:ctrl="clr-namespace:UserChecker.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UserChecker"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -29,18 +29,11 @@
     <StackPanel>
         <StackPanel Style="{StaticResource LineBlock}">
             <TextBlock Width="80" Text="User id " />
-            <TextBox Width="200" Margin="0,0,25,0">
-                <TextBox.Text>
-                    <Binding
-                        Mode="TwoWay"
-                        Path="User.UserId"
-                        UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <local:UserIdValidationRule ValidationStep="RawProposedValue" />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
+            <ctrl:ExtendedTextBox
+                Width="200"
+                Margin="0,0,25,0"
+                IsNumericOnly="True"
+                Text="{Binding User.UserId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             <Button
                 Width="80"
                 Command="{Binding SearchCommand}"
@@ -88,7 +81,7 @@
         <WebBrowser
             Height="320"
             Margin="0,10,0,0"
-            ap:WebBrowserUtility.BindableSource="{Binding HtmlContent}"
+            ctrl:WebBrowserUtility.BindableSource="{Binding HtmlContent}"
             Visibility="{Binding RenderIsVisible, Converter={StaticResource BTVConverter}}" />
     </StackPanel>
 </Window>

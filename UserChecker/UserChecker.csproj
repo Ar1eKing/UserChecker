@@ -61,11 +61,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ExtendedTextBox.cs" />
     <Compile Include="Controls\WebBrowserUtility.cs" />
     <Compile Include="Helpers\BaseVeiwModel.cs" />
     <Compile Include="Helpers\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\Command.cs" />
-    <Compile Include="Helpers\UserIdValidationRule.cs" />
     <Compile Include="Helpers\WebApi.cs" />
     <Compile Include="Models\Signature.cs" />
     <Compile Include="Models\SignatureRenderItem.cs" />
