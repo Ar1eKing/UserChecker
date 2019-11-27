@@ -2,12 +2,93 @@
     x:Class="UserChecker.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ap="clr-namespace:UserChecker.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UserChecker"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="MainWindow"
-    Width="800"
-    Height="450"
+    Title="User Checker"
+    Width="550"
+    Height="500"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid />
+
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BTVConverter" />
+
+        <Style x:Key="LineBlock" TargetType="StackPanel">
+            <Setter Property="StackPanel.Margin" Value="20,20,20,0" />
+            <Setter Property="StackPanel.Orientation" Value="Horizontal" />
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+        <StackPanel Style="{StaticResource LineBlock}">
+            <TextBlock Width="80" Text="User id " />
+            <TextBox Width="200" Margin="0,0,25,0">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="User.UserId"
+                        UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <local:UserIdValidationRule ValidationStep="RawProposedValue" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Button
+                Width="80"
+                Command="{Binding SearchCommand}"
+                Content="Search" />
+        </StackPanel>
+
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="16"
+            Foreground="Red"
+            Text="{Binding ErrorMessage}"
+            Visibility="{Binding ErrorIsVisible, Converter={StaticResource BTVConverter}}" />
+
+        <StackPanel Visibility="{Binding SearchResultIsVisible, Converter={StaticResource BTVConverter}}">
+            <StackPanel Style="{StaticResource LineBlock}">
+                <TextBlock Width="80" Text="Email " />
+
+                <TextBlock
+                    Width="200"
+                    Margin="0,0,25,0"
+                    Text="{Binding User.UserDetail.Email}" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource LineBlock}">
+                <TextBlock Width="80" Text="Signatures" />
+                <ComboBox
+                    Width="200"
+                    Margin="0,0,25,0"
+                    ItemsSource="{Binding User.Signatures.Values}"
+                    SelectedItem="{Binding SelectedSignature, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Title}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button
+                    Width="80"
+                    Command="{Binding RenderCommand}"
+                    Content="Render" />
+            </StackPanel>
+        </StackPanel>
+
+        <WebBrowser
+            Height="320"
+            Margin="0,10,0,0"
+            ap:WebBrowserUtility.BindableSource="{Binding HtmlContent}"
+            Visibility="{Binding RenderIsVisible, Converter={StaticResource BTVConverter}}" />
+    </StackPanel>
 </Window>
